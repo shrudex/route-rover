@@ -45,6 +45,7 @@ const Signup = () => {
                 placeholder="Full Name"
                 value={formData.fullname}
                 onChange={handleInputChange}
+                required
               />
 
               <input
@@ -54,6 +55,7 @@ const Signup = () => {
                 placeholder="Email"
                 value={formData.email}
                 onChange={handleInputChange}
+                required
               />
 
               <input
@@ -63,6 +65,7 @@ const Signup = () => {
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleInputChange}
+                required
               />
 
               <div>
@@ -87,6 +90,7 @@ const Signup = () => {
                 placeholder="Date of Birth"
                 value={formData.dob}
                 onChange={handleInputChange}
+                required
               />
               <input
                 type="number"
@@ -95,21 +99,20 @@ const Signup = () => {
                 placeholder="Mobile Number"
                 value={formData.mobile}
                 onChange={handleInputChange}
+                required
               />
 
               <button
                 type="submit"
                 className="w-full text-center py-3 rounded bg-black text-white hover:bg-green-dark focus:outline-none my-1"
               >
-                Create Account 
+                Create Account
               </button>
-
-              
             </form>
           </div>
 
           <div className="text-grey-dark mt-6">
-            Already have an account? {" "}
+            Already have an account?{" "}
             <Link
               className="no-underline border-b border-blue text-blue"
               to="/login"

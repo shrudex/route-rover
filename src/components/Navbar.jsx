@@ -6,9 +6,9 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav>
-      <Link to="/" className="title">
-        Website
+    <nav className="work bg-gray-700">
+      <Link to="/" className="title poppins">
+        RouteRover
       </Link>
       <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
         <span></span>
@@ -17,13 +17,16 @@ function Navbar() {
       </div>
       <ul className={menuOpen ? "open" : ""}>
         <li>
-          <NavLink to="/">About</NavLink>
+          <NavLink to="/find-train">Find Train</NavLink>
         </li>
         <li>
           <NavLink to="/">Services</NavLink>
         </li>
         <li>
           <NavLink to="/">Contact</NavLink>
+        </li>
+        <li>
+          <NavLink to="/login">LogIn</NavLink>
         </li>
       </ul>
     </nav>

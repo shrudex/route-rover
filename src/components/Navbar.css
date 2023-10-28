@@ -1,18 +1,17 @@
 .active {
-  background-color: #1d4ed8;
+  background-color: black;
 }
 
 nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #0f172a;
   color: white;
   top: 0;
 }
 
 nav .title {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   margin: 1rem;
   font-weight: bold;
   text-decoration: none;
