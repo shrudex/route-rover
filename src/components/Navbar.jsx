@@ -23,6 +23,9 @@ function Navbar({ currentUser, setCurrentUser }) {
           <NavLink to="/reservation">Reservation</NavLink>
         </li>
         <li>
+          <NavLink to="/station">Station</NavLink>
+        </li>
+        <li>
           <NavLink to="/dashboard">Dashboard</NavLink>
         </li>
         <li>

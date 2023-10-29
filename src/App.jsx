@@ -7,6 +7,7 @@ import FindTrain from "./pages/FindTrain";
 import Reservation from "./pages/Reservation";
 import { useState } from "react";
 import Dashboard from "./pages/Dashboard";
+import Station from "./pages/Station";
 function App() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -39,6 +40,7 @@ function App() {
           path="/dashboard"
           element={<Dashboard currentUser={currentUser} />}
         />
+        <Route path='/station' element={<Station currentUser={currentUser}/>}/>
       </Routes>
     </div>
   );

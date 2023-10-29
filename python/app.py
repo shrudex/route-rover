@@ -216,6 +216,29 @@ def fetch_user_booking():
     cursor.close()
     return jsonify(user_booking)
 
+@app.route('/stations', methods=['GET'])
+def get_all_stations():
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT stationCode, stationName, location, otherDetails FROM stations"
+    cursor.execute(query)
+    stations = cursor.fetchall()
+    cursor.close()
+    return jsonify(stations)
+
+@app.route('/stations/<station_code>', methods=['GET'])
+def get_station_details(station_code):
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT stationCode, stationName, location, otherDetails FROM stations WHERE stationCode = %s"
+    cursor.execute(query, (station_code,))
+    station = cursor.fetchone()
+    cursor.close()
+
+    if station is not None:
+        return jsonify(station)
+
+    return jsonify({'error': 'Station not found'}), 404
+
+
 
 CORS(app)  
 if __name__ == '__main__':

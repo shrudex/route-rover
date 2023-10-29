@@ -21,7 +21,7 @@ const Login = ({
         formData
       ); //making a POST request to Flask API
       if (response.status === 200) {
-        alert("Login Successfully");
+        //alert("Login Successfully");
         console.log(email);
         setEmail(formData.email);
         console.log(email);

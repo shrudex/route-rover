@@ -74,7 +74,7 @@ const ReservationDetails = ({ trainNumber, email, coach, date }) => {
   };
 
   const addPassenger = () => {
-    if (passengers.length < 4) {
+    if (passengers.length < 50) {
       // Limit to a maximum of 4 passengers
       setPassengers([...passengers, { name: "", age: "", gender: "", coach }]);
     }
@@ -145,7 +145,7 @@ const ReservationDetails = ({ trainNumber, email, coach, date }) => {
           <p>Loading...</p>
         ) : (
           <div className="flex gap-12 mb-4">
-            {passengers.length === 4 ? null : (
+            {passengers.length === 50 ? null : (
               <button
                 type="button"
                 onClick={addPassenger}
