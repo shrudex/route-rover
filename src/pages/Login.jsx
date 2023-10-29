@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-const Login = () => {
+const Login = ({
+  name,
+  setName,
+  email,
+  setEmail,
+  currentUser,
+  setCurrentUser,
+}) => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -15,7 +22,18 @@ const Login = () => {
       ); //making a POST request to Flask API
       if (response.status === 200) {
         alert("Login Successfully");
-        // checking
+        console.log(email);
+        setEmail(formData.email);
+        console.log(email);
+        axios
+          .post("http://localhost:5000/get_user", { email: formData.email })
+          .then((response) => {
+            console.log("User Data:", response.data);
+            setCurrentUser(response.data); // Handle the response here
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       }
     } catch (error) {
       console.error("Error:", error);

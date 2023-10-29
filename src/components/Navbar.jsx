@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Navbar.css";
 import { Link, NavLink } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ currentUser, setCurrentUser }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -20,14 +20,28 @@ function Navbar() {
           <NavLink to="/find-train">Find Train</NavLink>
         </li>
         <li>
-          <NavLink to="/">Services</NavLink>
+          <NavLink to="/reservation">Reservation</NavLink>
         </li>
         <li>
-          <NavLink to="/">Contact</NavLink>
+          <NavLink to="/dashboard">Dashboard</NavLink>
         </li>
         <li>
           <NavLink to="/login">LogIn</NavLink>
         </li>
+        {currentUser === null ? null : (
+          <div className="flex justify-center items-center flex-col mx-2">
+            <h3 className="text-center justify-center">Hi </h3>
+            <p className="text-white font-medium">{currentUser[1]}</p>
+          </div>
+        )}
+        {currentUser === null ? null : (
+          <button
+            onClick={() => setCurrentUser(null)}
+            className="bg-gray-900 rounded-lg py-0 mx-2 px-4 "
+          >
+            Log Out
+          </button>
+        )}
       </ul>
     </nav>
   );

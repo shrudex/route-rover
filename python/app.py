@@ -66,7 +66,24 @@ def login_user():
 
     return jsonify({'error': 'Incorrect password'}), 401
 
-@app.route('/trains', methods=['GET'])
+@app.route('/get_user', methods=['POST'])
+def get_user():
+    data = request.get_json()
+    email = data['email']
+
+    cursor = db.cursor()
+    query = "SELECT * FROM users WHERE email = %s"
+    cursor.execute(query, (email,))
+    result = cursor.fetchone()
+    cursor.close()
+
+    if result is None:
+        return jsonify({'name': 'User not found'})
+
+    user_name = result[0]
+    return jsonify(result)
+
+
 @app.route('/trains', methods=['GET'])
 def get_trains():
     cursor = db.cursor(dictionary=True)
@@ -98,6 +115,106 @@ def get_trains():
         train['departure'] = str(train['departure'])
 
     return jsonify(train_data)
+
+@app.route('/store_passenger_details', methods=['POST'])
+def store_passenger_details():
+    data = request.get_json()
+    email = data['email']
+    train_number = data['trainNumber']
+    book_id = data['bookID']
+    passengers = json.loads(data['passengers'])
+    #an array of passenger details
+
+    cursor = db.cursor()
+    for passenger in passengers:
+        pname = passenger['name']
+        page = passenger['age']
+        pgender = passenger['gender']
+        pclass = passenger['coach']
+        
+
+        insert_query = "INSERT INTO passengerDetails (email, trainNumber,bookID, pname, page, pgender, pclass) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+        cursor.execute(insert_query, (email, train_number, book_id, pname, page, pgender, pclass))
+    db.commit()
+    cursor.close()
+
+    return jsonify({'message': 'Passenger details stored successfully'})
+
+@app.route('/store_booking_details', methods=['POST'])
+def store_booking_details():
+    data = request.get_json()
+    email = data['email']
+    book_id = data['bookID']
+    train_number = data['trainNumber']
+    seats_booked = data['seatsBooked']
+    coach = data['coach']
+
+    # Calculate the fare by querying the trainList table
+    cursor = db.cursor(dictionary=True)
+    query = f"SELECT {coach} FROM trainList WHERE number = %s"  # Use f-string
+    cursor.execute(query, (train_number,))
+    result = cursor.fetchone()
+    cursor.close()
+
+    if result is None:
+        return jsonify({'error': 'Train not found'}), 404
+
+    price = result[coach]
+    fare = price * seats_booked
+
+    # Insert the booking details into the bookingFare table
+    cursor = db.cursor()
+    insert_query = "INSERT INTO bookingFare (email, bookID, trainNumber, seatsBooked, coach, fare) VALUES (%s, %s, %s, %s, %s, %s)"
+    cursor.execute(insert_query, (email, book_id, train_number, seats_booked, coach, fare))
+    db.commit()
+    cursor.close()
+
+    return jsonify({'message': 'Booking details stored successfully'})
+
+@app.route('/user_booking_details', methods=['POST'])
+def user_booking_details():
+    data = request.get_json()
+    email = data['email']
+    bookID = data['bookID']
+    journeyDate = data['journeyDate']
+
+    cursor = db.cursor()
+    insert_query = "INSERT INTO userBooking (email, bookID, journeyDate) VALUES (%s, %s, %s)"
+    cursor.execute(insert_query, (email, bookID, journeyDate))
+    db.commit()
+    cursor.close()
+
+    return jsonify({'message': 'User booking details stored successfully'})
+
+@app.route('/fetch_passenger_details', methods=['GET'])
+def fetch_passenger_details():
+    bookID = request.args.get('bookID')
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT pname, page, pgender, pclass FROM passengerDetails WHERE bookID = %s"
+    cursor.execute(query, (bookID,))
+    passenger_details = cursor.fetchall()
+    cursor.close()
+    return jsonify(passenger_details)
+
+@app.route('/fetch_booking_fare', methods=['GET'])
+def fetch_booking_fare():
+    bookID = request.args.get('bookID')
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT seatsBooked, fare FROM bookingFare WHERE bookID = %s"
+    cursor.execute(query, (bookID,))
+    booking_fare = cursor.fetchone()
+    cursor.close()
+    return jsonify(booking_fare)
+
+@app.route('/fetch_user_booking', methods=['GET'])
+def fetch_user_booking():
+    bookID = request.args.get('bookID')
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT bookID, journeyDate FROM userBooking WHERE bookID = %s"
+    cursor.execute(query, (bookID,))
+    user_booking = cursor.fetchone()
+    cursor.close()
+    return jsonify(user_booking)
 
 
 CORS(app)  
