@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -15,12 +16,12 @@ const Home = () => {
             journeys. Whether you're a passenger looking to book tickets or an
             administrator overseeing train operations, we've got you covered.
           </p>
-          <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
-            <a
-              href="#"
+          <div className="flex raleway flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
+            <NavLink
+              to="/reservation"
               className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-yellow-500 hover:bg-yellow-600 focus:ring-4 focus:ring-blue-300"
             >
-              Get started
+              Book Ticket
               <svg
                 className="w-3.5 h-3.5 ml-2"
                 aria-hidden="true"
@@ -36,17 +37,17 @@ const Home = () => {
                   d="M1 5h12m0 0L9 1m4 4L9 9"
                 />
               </svg>
-            </a>
-            <a
-              href="#"
+            </NavLink>
+            <NavLink
+              to="/login"
               className="inline-flex justify-center hover:text-gray-900 items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg border border-white hover:bg-gray-100 focus:ring-4 focus:ring-gray-400"
             >
-              Learn more
-            </a>
+              LogIn
+            </NavLink>
           </div>
         </div>
       </section>
-      <div className="find-train w-10/12 h-20 mx-auto py-10">
+      <div className="find-train hidden w-10/12 h-20 mx-auto py-10">
         <form>
           <label
             htmlFor="default-search"

@@ -238,6 +238,50 @@ def get_station_details(station_code):
 
     return jsonify({'error': 'Station not found'}), 404
 
+@app.route('/get-user-booking', methods=['GET'])
+def get_user_booking():
+    email = request.args.get('email')
+    #print(email)
+    if not email:
+        return jsonify({"error": "Email is required"})
+
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT bookID, journeyDate FROM userBooking WHERE email = %s", (email,))
+    booking_data = cursor.fetchall()
+    
+    cursor.close()
+    #print(booking_data)
+    if booking_data:
+        for booking in booking_data:
+            bookID  = booking['bookID']
+            cursor = db.cursor(dictionary=True)
+            cursor.execute("SELECT trainNumber, seatsBooked, coach, fare FROM bookingFARE where bookID = %s", (bookID,))
+            temp_data = cursor.fetchone()
+            cursor.close()
+            
+            for key, value in temp_data.items():
+                booking[key] = value
+            
+            cursor = db.cursor(dictionary=True)
+            cursor.execute("SELECT pName, pAge, pGender, pClass from passengerDetails where bookID = %s", (bookID, ))
+            temp_data = cursor.fetchall()
+            cursor.close()
+            #print(temp_data)
+            booking['passengerDetails'] = temp_data
+            
+            trainNum = booking['trainNumber']
+            cursor = db.cursor (dictionary=True)
+            cursor.execute("SELECT name, origin, destination, arrival, departure from trainList where number = %s", (trainNum,))
+            temp_data = cursor.fetchone()
+            #for train in temp_data:
+            temp_data['arrival'] = str(temp_data['arrival'])
+            temp_data['departure'] = str(temp_data['departure'])
+            cursor.close()
+            booking['trainData'] = temp_data
+            
+        return jsonify(booking_data)
+    else:
+        return jsonify({"error": "User not found"})
 
 
 CORS(app)  
