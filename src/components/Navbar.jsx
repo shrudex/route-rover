@@ -28,10 +28,11 @@ function Navbar({ currentUser, setCurrentUser }) {
         <li>
           <NavLink to="/dashboard">Dashboard</NavLink>
         </li>
-        {currentUser === null ?(
-        <li>
-          <NavLink to="/login">LogIn</NavLink>
-        </li> ): null}
+        {currentUser === null ? (
+          <li>
+            <NavLink to="/login">LogIn</NavLink>
+          </li>
+        ) : null}
         {currentUser === null ? null : (
           <div className="flex justify-center items-center flex-col mx-2">
             <h3 className="text-center justify-center">Hi </h3>
