@@ -283,6 +283,30 @@ def get_user_booking():
     else:
         return jsonify({"error": "User not found"})
 
+@app.route('/dropdown_options', methods=['GET'])
+def get_dropdown_options():
+    cur = db.cursor()  # Use db instead of mysql.connection
+    cur.execute("SELECT typeOfQuery FROM contact")
+    dropdown_options = cur.fetchall()
+    cur.close()
+    return jsonify({'options': dropdown_options})
+
+@app.route('/get_helpline/<string:selected_option>', methods=['GET'])
+def get_helpline(selected_option):
+    try:
+        cur = db.cursor(dictionary=True)
+        cur.execute("SELECT HelpLineNumber FROM contact WHERE typeOfQuery = %s", (selected_option,))
+        helpline_data = cur.fetchone()
+        cur.close()
+
+        if helpline_data:
+            return jsonify({'helpline': helpline_data['HelpLineNumber']})
+        else:
+            return jsonify({'error': 'Helpline not found for the selected option'})
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
 
 CORS(app)  
 if __name__ == '__main__':

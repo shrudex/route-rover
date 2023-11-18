@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import Contact from "./pages/Contact";
 import FindTrain from "./pages/FindTrain";
 import Reservation from "./pages/Reservation";
 import { useState } from "react";
@@ -39,6 +40,10 @@ function App() {
         <Route
           path="/dashboard"
           element={<Dashboard currentUser={currentUser} />}
+        />
+        <Route
+          path="/contact"
+          element={<Contact currentUser={currentUser} />}
         />
         <Route path='/station' element={<Station currentUser={currentUser}/>}/>
       </Routes>

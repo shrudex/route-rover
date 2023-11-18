@@ -7,9 +7,11 @@ function Navbar({ currentUser, setCurrentUser }) {
 
   return (
     <nav className="work bg-gray-700">
+      <div className=" flex items-center justify-center gap-0 px-2">
+        <img className="w-fit h-14" src="./locomotive.webp" alt="logo" />
       <Link to="/" className="title poppins">
         RouteRover
-      </Link>
+      </Link></div>
       <div className="menu" onClick={() => setMenuOpen(!menuOpen)}>
         <span></span>
         <span></span>
@@ -27,6 +29,9 @@ function Navbar({ currentUser, setCurrentUser }) {
         </li>
         <li>
           <NavLink to="/dashboard">Dashboard</NavLink>
+        </li>
+        <li>
+          <NavLink to="/contact">Contact</NavLink>
         </li>
         {currentUser === null ? (
           <li>
