@@ -308,6 +308,56 @@ def get_helpline(selected_option):
         return jsonify({'error': str(e)})
 
 
+
+#admin login section
+@app.route('/admin_login', methods=['POST'])
+def admin_login():
+    data = request.get_json()
+    username = data['username']
+    email = data['email']
+    password = data['password']
+
+    cursor = db.cursor()
+    query = "SELECT username, password FROM admin WHERE email = %s"
+    cursor.execute(query, (email,))
+    result = cursor.fetchone()
+
+    if result is None:
+        cursor.close()
+        return jsonify({'error': 'User not found'}), 401
+
+    username, stored_password = result
+    cursor.close()
+
+    if password == stored_password:
+        # successful login
+        return jsonify({'message': 'Login successful', 'user_id': username})
+
+    return jsonify({'error': 'Incorrect password'}), 401
+
+
+
+@app.route('/get_admin', methods=['POST'])
+def get_admin():
+    data = request.get_json()
+    email = data['email']
+
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT * FROM admin WHERE email = %s"
+    cursor.execute(query, (email,))
+    result = cursor.fetchone()
+    cursor.close()
+
+    if result is None:
+        return jsonify({'name': 'User not found'})
+    
+    admin_data = {key: result[key] for key in result if key != 'password'}
+
+    return jsonify(admin_data)
+
+
+
+
 CORS(app)  
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

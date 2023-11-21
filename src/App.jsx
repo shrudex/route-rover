@@ -1,6 +1,7 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Navbar from "./components/Navbar";
+import AdminNavbar from "./components/AdminNavbar"; // Import the AdminNavbar component
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
 import Contact from "./pages/Contact";
@@ -9,13 +10,29 @@ import Reservation from "./pages/Reservation";
 import { useState } from "react";
 import Dashboard from "./pages/Dashboard";
 import Station from "./pages/Station";
+import Admin from "./pages/Admin";
+
 function App() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
+  const location = useLocation();
+
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminName, setAdminName] = useState("");
+  const [currentAdmin, setCurrentAdmin] = useState(null);
+
+  // Check if the current route is under the '/admin' path
+  const isAdminRoute = location.pathname.startsWith("/admin");
+
   return (
     <div className="app">
-      <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      {/* Conditionally render Navbar or AdminNavbar based on the route */}
+      {isAdminRoute ? (
+        <AdminNavbar currentUser={currentUser} />
+      ) : (
+        <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
@@ -45,7 +62,23 @@ function App() {
           path="/contact"
           element={<Contact currentUser={currentUser} />}
         />
-        <Route path='/station' element={<Station currentUser={currentUser}/>}/>
+        <Route
+          path="/station"
+          element={<Station currentUser={currentUser} />}
+        />
+        <Route
+          path="/admin"
+          element={
+            <Admin
+              adminEmail={adminEmail}
+              setAdminEmail={setAdminEmail}
+              adminName={adminName}
+              setAdminName={setAdminName}
+              currentAdmin={currentAdmin}
+              setCurrentAdmin={setCurrentAdmin}
+            />
+          }
+        />
       </Routes>
     </div>
   );
