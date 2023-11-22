@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Navbar.css";
 import { Link, NavLink } from "react-router-dom";
 
-function AdminNavbar({ currentUser, setCurrentUser }) {
+function AdminNavbar({ currentAdmin, setCurrentAdmin }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -20,34 +20,28 @@ function AdminNavbar({ currentUser, setCurrentUser }) {
       </div>
       <ul className={menuOpen ? "open" : ""}>
         <li>
-          <NavLink to="/find-train">Find Train</NavLink>
+          <NavLink to="/admin-dashboard">Dashboard</NavLink>
         </li>
         <li>
-          <NavLink to="/reservation">Reservation</NavLink>
+          <NavLink to="/admin-add-train">Add Train</NavLink>
         </li>
         <li>
-          <NavLink to="/station">Station</NavLink>
+          <NavLink to="/admin-train-schedule">Train Scheduler</NavLink>
         </li>
-        <li>
-          <NavLink to="/dashboard">Dashboard</NavLink>
-        </li>
-        <li>
-          <NavLink to="/contact">Contact</NavLink>
-        </li>
-        {currentUser === null ? (
+        {currentAdmin === null ? (
           <li>
-            <NavLink to="/login">LogIn</NavLink>
+            <NavLink to="/admin">LogIn</NavLink>
           </li>
         ) : null}
-        {currentUser === null ? null : (
+        {currentAdmin === null ? null : (
           <div className="flex justify-center items-center flex-col mx-2">
             <h3 className="text-center justify-center">Hi </h3>
-            <p className="text-white font-medium">{currentUser[1]}</p>
+            <p className="text-white font-medium">{currentAdmin.full_name}</p>
           </div>
         )}
-        {currentUser === null ? null : (
+        {currentAdmin === null ? null : (
           <button
-            onClick={() => setCurrentUser(null)}
+            onClick={() => setCurrentAdmin(null)}
             className="bg-gray-900 rounded-lg py-0 mx-2 px-4 "
           >
             Log Out

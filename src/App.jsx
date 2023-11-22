@@ -9,9 +9,11 @@ import FindTrain from "./pages/FindTrain";
 import Reservation from "./pages/Reservation";
 import { useState } from "react";
 import Dashboard from "./pages/Dashboard";
+import AdminD from "./pages/AdminD";
 import Station from "./pages/Station";
 import Admin from "./pages/Admin";
-
+import AddTrain from "./pages/Admin/AddTrain";
+import TrainSchedule from "./pages/Admin/TrainSchedule";
 function App() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -29,7 +31,10 @@ function App() {
     <div className="app">
       {/* Conditionally render Navbar or AdminNavbar based on the route */}
       {isAdminRoute ? (
-        <AdminNavbar currentUser={currentUser} />
+        <AdminNavbar
+          currentAdmin={currentAdmin}
+          setCurrentAdmin={setCurrentAdmin}
+        />
       ) : (
         <Navbar currentUser={currentUser} setCurrentUser={setCurrentUser} />
       )}
@@ -59,6 +64,10 @@ function App() {
           element={<Dashboard currentUser={currentUser} />}
         />
         <Route
+          path="/admin-dashboard"
+          element={<AdminD currentAdmin={currentAdmin} />}
+        />
+        <Route
           path="/contact"
           element={<Contact currentUser={currentUser} />}
         />
@@ -78,6 +87,14 @@ function App() {
               setCurrentAdmin={setCurrentAdmin}
             />
           }
+        />
+        <Route
+          path="/admin-add-train"
+          element={<AddTrain currentAdmin={currentAdmin} />}
+        />
+        <Route
+          path="/admin-train-schedule"
+          element={<TrainSchedule currentAdmin={currentAdmin} />}
         />
       </Routes>
     </div>

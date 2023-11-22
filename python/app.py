@@ -355,8 +355,89 @@ def get_admin():
 
     return jsonify(admin_data)
 
+@app.route('/search_train', methods=['POST'])
+def search_train():
+    data = request.get_json()
+    number = data['number']
+    
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT * FROM route WHERE trainNumber = %s"
+    cursor.execute(query, (number,))
+    result = cursor.fetchone()
+    cursor.close()
+    
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT name, origin, destination from trainList where number = %s"
+    cursor.execute(query, (number,))
+    result2 = cursor.fetchone()
+    cursor.close()
+    
+    if result is None:
+        return jsonify({'number': 'Train not found'})
+    
+    cresult = {
+    "route": result,
+    "trainList": result2
+    }
 
+    return jsonify(cresult)
 
+@app.route('/add_train', methods=['POST'])
+def add_train():
+    try:
+        data = request.get_json()
+
+        # Extract data from the request
+        number = int(data['number'])
+        name = data['name']
+        origin = data['origin']
+        destination = data['destination']
+        arrival = data['arrival']
+        departure = data['departure']
+        mon = 0 if data['mon']==False else 1
+        tue = 0 if data['tue']==False else 1
+        wed = 0 if data['wed']==False else 1
+        thu = 0 if data['thu']==False else 1
+        fri = 0 if data['fri']==False else 1
+        sat = 0 if data['sat']==False else 1
+        sun = 0 if data['sun']==False else 1
+        _1A = float(data['1A'])
+        _2A = float(data['2A'])
+        _3A = float(data['3A'])
+        SL = float(data['SL'])
+        General = float(data['General'])
+
+        print(data)
+        cursor = db.cursor()
+
+        # Insert the data into the table
+        query = "INSERT INTO trainList (number, name, origin, destination, arrival, departure, mon, tue, wed, thu, fri, sat, sun, 1A, 2A, 3A, SL, General) " \
+                "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (number, name, origin, destination, arrival, departure, mon, tue, wed, thu, fri, sat, sun, _1A, _2A, _3A, SL, General)
+        cursor.execute(query, values)
+
+        # Commit the changes
+        db.commit()
+
+        # Close the cursor
+        cursor.close()
+
+        return jsonify({'message': 'Train added successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/setpos', methods=['POST'])
+def set_pos():
+    data = request.get_json()
+    currPos = data['currPos']
+    number = data['number']
+
+    cursor = db.cursor()
+    query = "UPDATE route Set position = %s where trainNumber = %s"
+    cursor.execute(query, (currPos, number))
+    db.commit()
+    cursor.close()
+    return jsonify({'message': 'Position set successfully'}), 200
 
 CORS(app)  
 if __name__ == '__main__':
