@@ -14,6 +14,7 @@ import Station from "./pages/Station";
 import Admin from "./pages/Admin";
 import AddTrain from "./pages/Admin/AddTrain";
 import TrainSchedule from "./pages/Admin/TrainSchedule";
+import LiveTrainSchedule from "./pages/LiveTrainSchedule";
 function App() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -96,6 +97,7 @@ function App() {
           path="/admin-train-schedule"
           element={<TrainSchedule currentAdmin={currentAdmin} />}
         />
+        <Route path="/live-train" element={<LiveTrainSchedule />} />
       </Routes>
     </div>
   );

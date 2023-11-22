@@ -22,6 +22,9 @@ function Navbar({ currentUser, setCurrentUser }) {
           <NavLink to="/find-train">Find Train</NavLink>
         </li>
         <li>
+          <NavLink to="/live-train">Track Train</NavLink>
+        </li>
+        <li>
           <NavLink to="/reservation">Reservation</NavLink>
         </li>
         <li>
