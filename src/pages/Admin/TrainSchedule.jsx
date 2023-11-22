@@ -3,6 +3,7 @@ import axios from "axios";
 
 const TrainSchedule = ({ currentAdmin }) => {
   const [trainRoute, setTrainRoute] = useState(null);
+  
   const [formData, setFormData] = useState({
     number: "",
   });

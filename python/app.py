@@ -439,6 +439,18 @@ def set_pos():
     cursor.close()
     return jsonify({'message': 'Position set successfully'}), 200
 
+@app.route('/find_hotels', methods=['POST'])
+def find_hotels():
+    data = request.get_json()
+    city = data['city']
+    print(data)
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT * from hotel where location = %s"
+    cursor.execute (query, (city,))
+    result = cursor.fetchall()
+    
+    return jsonify(result)
+    
 CORS(app)  
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
