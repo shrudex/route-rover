@@ -3,7 +3,7 @@ import axios from "axios";
 
 const TrainSchedule = ({ currentAdmin }) => {
   const [trainRoute, setTrainRoute] = useState(null);
-  
+
   const [formData, setFormData] = useState({
     number: "",
   });
@@ -96,52 +96,69 @@ const TrainSchedule = ({ currentAdmin }) => {
       )}
 
       {trainRoute !== null && (
-        <div>
-          <h2>Route Details</h2>
-          <p>Train Number: {trainRoute.route.trainNumber}</p>
-          <p>Train Name: {trainRoute.trainList.name}</p>
-          <p>Start: {trainRoute.trainList.origin}</p>
-          <p>Stop 1: {trainRoute.route.stop1}</p>
-          <p>Stop 2: {trainRoute.route.stop2}</p>
-          <p>Stop 3: {trainRoute.route.stop3}</p>
+        <div className="">
+          <div className="mx-auto text-center text-lg w-fit border px-40 mt-4 border-black rounded">
+            <h2 className="text-3xl ">Route Details</h2>
+            <p>
+              Train Number:{" "}
+              <span className="text-blue-950 font-semibold">
+                {trainRoute.route.trainNumber}
+              </span>
+            </p>
+            <p>
+              Train Name:{" "}
+              <span className="text-blue-950 font-semibold">
+                {trainRoute.trainList.name}
+              </span>
+            </p>
+            <p>Start: {trainRoute.trainList.origin}</p>
+            <p>Stop 1: {trainRoute.route.stop1}</p>
+            <p>Stop 2: {trainRoute.route.stop2}</p>
+            <p>Stop 3: {trainRoute.route.stop3}</p>
 
-          {/* Conditional rendering for stop4 */}
-          {trainRoute.route.stop4 !== null && (
-            <p>Stop 4: {trainRoute.route.stop4}</p>
-          )}
+            {/* Conditional rendering for stop4 */}
+            {trainRoute.route.stop4 !== null && (
+              <p>Stop 4: {trainRoute.route.stop4}</p>
+            )}
 
-          {/* Conditional rendering for stop5 */}
-          {trainRoute.route.stop5 !== null && (
-            <p>Stop 5: {trainRoute.route.stop5}</p>
-          )}
+            {/* Conditional rendering for stop5 */}
+            {trainRoute.route.stop5 !== null && (
+              <p>Stop 5: {trainRoute.route.stop5}</p>
+            )}
 
-          {/* Conditional rendering for stop6 */}
-          {trainRoute.route.stop6 !== null && (
-            <p>Stop 6: {trainRoute.route.stop6}</p>
-          )}
-          <p>Current Position : {trainRoute.route.position}</p>
-          <p>End: {trainRoute.trainList.destination}</p>
-          <br />
-          <br />
-          <form onSubmit={handleSubmit2}>
-            <label htmlFor="number">Select Current Train Position</label>
-            <input
-              type="text"
-              className="block border border-grey-light w-full p-3 rounded mb-4"
-              name="currPos"
-              placeholder="Current Stop Position"
-              value={formData2.currPos}
-              onChange={handleInputChange2}
-              required
-            />
+            {/* Conditional rendering for stop6 */}
+            {trainRoute.route.stop6 !== null && (
+              <p>Stop 6: {trainRoute.route.stop6}</p>
+            )}
+            <p>End: {trainRoute.trainList.destination}</p>
+            <p>
+              Current Position :{" "}
+              <span className="text-blue-950 font-semibold">
+                {trainRoute.route.position}
+              </span>
+            </p>
+          </div>
+          <div className="w-fit mx-auto border border-black rounded px-60 mt-10 py-4">
+            <form onSubmit={handleSubmit2}>
+              <label htmlFor="number" className="text-xl">Select Current Train Position</label>
+              <input
+                type="text"
+                className="block border border-gray-200 w-full p-3 rounded mb-2 text-center"
+                name="currPos"
+                placeholder="Current Stop Position"
+                value={formData2.currPos}
+                onChange={handleInputChange2}
+                required
+              />
 
-            <button
-              type="submit"
-              className="w-full text-center py-3 rounded bg-black text-white hover:bg-green-dark focus:outline-none my-1"
-            >
-              Set Train Position
-            </button>
-          </form>
+              <button
+                type="submit"
+                className="w-full text-center py-3 rounded bg-black text-white hover:bg-green-dark focus:outline-none my-1"
+              >
+                Set Train Position
+              </button>
+            </form>
+          </div>
         </div>
       )}
     </div>
