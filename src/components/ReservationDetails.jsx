@@ -38,7 +38,15 @@ const ReservationDetails = ({ trainNumber, email, coach, date }) => {
         }
       );
 
-      if (passengerResponse.status === 200) {
+      if (passengerResponse.data === "error") {
+        alert("No vacant seats left");
+      }
+
+      if (
+        passengerResponse.status === 200 &&
+        passengerResponse.data !== "error"
+      ) {
+        console.log(passengerResponse.data);
         const bookingResponse = await axios.post(
           "http://localhost:5000/store_booking_details",
           {
@@ -50,7 +58,10 @@ const ReservationDetails = ({ trainNumber, email, coach, date }) => {
           }
         );
 
-        if (bookingResponse.status === 200) {
+        if (
+          bookingResponse.status === 200 &&
+          passengerResponse.data !== "error"
+        ) {
           const userBookingResponse = await axios.post(
             "http://localhost:5000/user_booking_details",
             {
@@ -60,7 +71,10 @@ const ReservationDetails = ({ trainNumber, email, coach, date }) => {
             }
           );
 
-          if (userBookingResponse.status === 200) {
+          if (
+            userBookingResponse.status === 200 &&
+            passengerResponse.data !== "error"
+          ) {
             setBookID(book_id);
             setShowBill(true);
           }

@@ -126,19 +126,55 @@ def store_passenger_details():
     #an array of passenger details
 
     cursor = db.cursor()
-    for passenger in passengers:
-        pname = passenger['name']
-        page = passenger['age']
-        pgender = passenger['gender']
-        pclass = passenger['coach']
+    try:
+        pc = passengers[0]['coach']
+        print ("passenger coach", pc)
+        print ("train number", train_number)
+        var = ""
+        var = 'class1A' if pc == '1A' else var
+        var = 'class2A' if pc == '2A' else var
+        var = 'class3A' if pc == '3A' else var
+        var = 'sleeper' if pc == 'SL' else var
+        var = 'general' if pc == 'General' else var 
         
+        q1 = f"SELECT {var} FROM vacancy WHERE trainNumber = %s"
+        cursor.execute(q1, (train_number,))
+        result = cursor.fetchone()
+        print("result")
+        print(result)
+        print(result[0])
+        if (result[0]+len(passengers)>60):
+            print("fa")
+            return jsonify("error")
+        else:
+            for passenger in passengers:
+                pname = passenger['name']
+                page = passenger['age']
+                pgender = passenger['gender']
+                pclass = passenger['coach']
+                var = ""
+                var = 'class1A' if pclass == '1A' else var
+                var = 'class2A' if pclass == '2A' else var
+                var = 'class3A' if pclass == '3A' else var
+                var = 'sleeper' if pclass == 'SL' else var
+                var = 'general' if pclass == 'General' else var 
+            
+                new_query = f"UPDATE VACANCY SET {var} = {var} + 1 WHERE trainNumber = %s"
+                cursor.execute(new_query, (train_number,))
 
-        insert_query = "INSERT INTO passengerDetails (email, trainNumber,bookID, pname, page, pgender, pclass) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(insert_query, (email, train_number, book_id, pname, page, pgender, pclass))
-    db.commit()
-    cursor.close()
+                insert_query = "INSERT INTO passengerDetails (email, trainNumber,bookID, pname, page, pgender, pclass) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                cursor.execute(insert_query, (email, train_number, book_id, pname, page, pgender, pclass))
 
-    return jsonify({'message': 'Passenger details stored successfully'})
+            db.commit()
+            cursor.close()
+
+            return jsonify({'message': 'Passenger details stored successfully'})
+    
+    except mysql.connector.Error as err:
+        db.rollback()  # Rollback the transaction in case of an error
+        return jsonify({'error': f'Database error: {err}'})
+    finally:
+        cursor.close()
 
 @app.route('/store_booking_details', methods=['POST'])
 def store_booking_details():

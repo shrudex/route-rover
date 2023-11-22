@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const LiveTrainSchedule = () => {
@@ -47,15 +47,15 @@ const LiveTrainSchedule = () => {
       });
 
       if (response.status === 200) {
-        setHotels(response.data);
-        console.log(response.data);
-        console.log("Hotels fetched successfully!");
-        console.log(hotels);
+        await setHotels(response.data);
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
+  useEffect(() => {
+    findHotels();
+  }, [city]); // This will log whenever 'hotels' state is updated
 
   return (
     <div className="w-full h-full py-16 work bg-white">
@@ -84,7 +84,7 @@ const LiveTrainSchedule = () => {
             </form>
           </div>
           <div className="">
-            {trainRoute && (
+            {trainRoute && trainRoute.number !== "Train not found" && (
               <div className="border text-center border-black rounded items-center justify-center bg-gray-100 px-20 w-[700px]  mt-4 py-2">
                 <h2 className="text-center text-3xl uppercase mb-3 w-full">
                   Route Details
@@ -106,9 +106,9 @@ const LiveTrainSchedule = () => {
                   Start:{" "}
                   <span className="text-blue-900 font-semibold">
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         setCity(trainRoute?.trainList?.origin);
-                        findHotels();
+                        await findHotels();
                         setIsModalOpen(true);
                       }}
                     >
@@ -120,9 +120,9 @@ const LiveTrainSchedule = () => {
                   Stop 1:{" "}
                   <span className="text-blue-900 font-semibold">
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         setCity(trainRoute?.route?.stop1);
-                        findHotels();
+                        await findHotels();
                         setIsModalOpen(true);
                       }}
                     >
@@ -134,9 +134,9 @@ const LiveTrainSchedule = () => {
                   Stop 2:{" "}
                   <span className="text-blue-900 font-semibold">
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         setCity(trainRoute?.route?.stop2);
-                        findHotels();
+                        await findHotels();
                         setIsModalOpen(true);
                       }}
                     >
@@ -149,9 +149,9 @@ const LiveTrainSchedule = () => {
                   <span className="text-blue-900 font-semibold">
                     {" "}
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         setCity(trainRoute?.route?.stop3);
-                        findHotels();
+                        await findHotels();
                         setIsModalOpen(true);
                       }}
                     >
@@ -165,9 +165,9 @@ const LiveTrainSchedule = () => {
                     Stop 4:{" "}
                     <span className="text-blue-900 font-semibold">
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           setCity(trainRoute?.route?.stop4);
-                          findHotels();
+                          await findHotels();
                           setIsModalOpen(true);
                         }}
                       >
@@ -182,9 +182,9 @@ const LiveTrainSchedule = () => {
                     Stop 5:{" "}
                     <span className="text-blue-900 font-semibold">
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           setCity(trainRoute?.route?.stop5);
-                          findHotels();
+                          await findHotels();
                           setIsModalOpen(true);
                         }}
                       >
@@ -199,9 +199,9 @@ const LiveTrainSchedule = () => {
                     Stop 6:{" "}
                     <span className="text-blue-900 font-semibold">
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           setCity(trainRoute?.route?.stop6);
-                          findHotels();
+                          await findHotels();
                           setIsModalOpen(true);
                         }}
                       >
@@ -215,9 +215,9 @@ const LiveTrainSchedule = () => {
                   <span className="text-blue-900 font-semibold">
                     {" "}
                     <button
-                      onClick={() => {
+                      onClick={async () => {
                         setCity(trainRoute?.trainList?.destination);
-                        findHotels();
+                        await findHotels();
                         setIsModalOpen(true);
                       }}
                     >
@@ -247,12 +247,30 @@ const LiveTrainSchedule = () => {
                     <p className="text-2xl text-blue-900 font-semibold uppercase">
                       {city}
                     </p>
-                    <p className="text-xl">Hotels in <span className="text-gray-900 font-semibold">{city}</span></p>
+                    <p className="text-xl">
+                      Hotels in{" "}
+                      <span className="text-gray-900 font-semibold">
+                        {city}
+                      </span>
+                    </p>
                     <ul className="text-lg mt-3 px-20">
                       {hotels.map((hotel, index) => (
-                        <li key={index} className="border border-black rounded px-12 mb-3">
-                          <p>Hotel Name: <span className="text-green-900 font-medium">{hotel.hotelName}</span></p>
-                          <p>Hotel Number: <span className="text-blue-900 font-medium">{hotel.hotelNumber}</span></p>
+                        <li
+                          key={index}
+                          className="border border-black rounded px-12 mb-3"
+                        >
+                          <p>
+                            Hotel Name:{" "}
+                            <span className="text-green-900 font-medium">
+                              {hotel.hotelName}
+                            </span>
+                          </p>
+                          <p>
+                            Hotel Number:{" "}
+                            <span className="text-blue-900 font-medium">
+                              {hotel.hotelNumber}
+                            </span>
+                          </p>
                         </li>
                       ))}
                     </ul>
